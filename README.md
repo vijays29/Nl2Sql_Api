@@ -1,8 +1,9 @@
 # NL2SQL
 
 
-### Make sure before install the packages current path of th .txt file
-#### Use This command to install required Packages
+### Ensure You're in the Correct Directory Before Installing Packages
+#### Before running the installation command, navigate to the directory where requirements.txt is located.
+#### Install Required Packages
 ```bash
 pip install -r requirements.txt
 ```
