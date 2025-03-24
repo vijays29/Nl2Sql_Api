@@ -1,18 +1,3 @@
-"""
-Module to execute SQL queries on a MySQL database.
-
-Modules Used:
-    - os: Fetch environment variables.
-    - mysql.connector: MySQL database connection.
-    - fastapi: Exception handling.
-
-Classes:
-    - Mysql: Manages a MySQL connection pool and executes queries.
-
-Functions:
-    - Db_Output_Gen: Fetches query results.
-"""
-
 import os
 import mysql.connector
 from mysql.connector import pooling,Error
