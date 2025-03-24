@@ -60,8 +60,8 @@ class Mysql:
                 mycursor.close()
                 connection.close()
 
-Db_Instance = Mysql()
+db_instance = Mysql()
 
 def Db_Output_Gen(query: str,params=None)->list[dict] | None:
      """Fetches SQL query results."""
-     return Db_Instance.Execute_Query(query)
+     return db_instance.Execute_Query(query)

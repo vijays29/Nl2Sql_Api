@@ -7,7 +7,7 @@ src/__pycache__/
 src/utils/__pycache__/
 
 # Ignore environment files
-
+.env
 # Ignore Python venv files
 Include/
 Lib/

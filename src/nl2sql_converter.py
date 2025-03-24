@@ -42,36 +42,37 @@ def Convert_Natural_Language_To_Sql(user_query:str,params = None) -> str | None:
             * If the user specifies column names, include only those columns in the `SELECT` statement.  
             * If the user requests "all columns," "all data," or does not specify columns, use `SELECT *`. 
             * if the user asks the data using table names 
-            * If the user requests "all tables,return `"ERROR"
-            * 
+            * If the user requests "all tables,return `"ERROR" 
             * If no tables exist, return `"ERROR"`.
-            * If the user requests "the first table," "the second table," or similar:
-                - Use the first, second, third, etc., table in the schema as appropriate.
-                - If the requested position exceeds the number of available tables, return `"ERROR"`.
 
             3. **Schema Adherence & Validation:**  
             * Use only table and column names provided in the schema.  
             * If the user requests a non-existent table or column, return `"ERROR"`.
 
-            4. **Precise Filtering & Conditions:**
+            4. **Handling Columns Appearing in Multiple Tables:**
+            * If a column exists in multiple tables, return a `UNION ALL` query selecting that column from each table.
+            * The result should include a new column indicating the source table name.
+        
+
+            5. **Precise Filtering & Conditions:**
             * Translate all WHERE clause conditions precisely as stated.
             * Ensure accurate handling of date ranges (using appropriate date/time functions if needed), numerical comparisons, and string matching (using LIKE or other relevant functions as needed).
 
-            5. **Aggregation and Ordering Implementation:**
+            6. **Aggregation and Ordering Implementation:**
             * Correctly implement any requested aggregation functions (SUM, COUNT, AVG, MIN, MAX, etc.).
             * Implement ORDER BY clauses exactly as requested, including the specified column(s) and sort order (ASC or DESC). Default to ASC if not specified.
 
-            6. **Pagination is Strictly Prohibited (LIMIT, OFFSET, FETCH):**
+            7. **Pagination is Strictly Prohibited (LIMIT, OFFSET, FETCH):**
             * Your output MUST NOT include:
                 * `LIMIT`
                 * `OFFSET`
                 * `FETCH NEXT … ROWS ONLY`
             * If a user requests any form of pagination, return `"ERROR"`
 
-            7. **Zero Tolerance for Additional Text:**
+            8. **Zero Tolerance for Additional Text:**
             * Your output consists SOLELY of the generated SQL SELECT statement. Do NOT include any explanations, comments, or introductory text. Failure to adhere to this is an error.
 
-            8. **Assume Correct Grammar:**
+            9. **Assume Correct Grammar:**
             * Assume that the user input is grammatically correct, though it might contain synonyms or multiple ways to ask the same question.
 
             **Process:**
@@ -85,11 +86,10 @@ def Convert_Natural_Language_To_Sql(user_query:str,params = None) -> str | None:
             * Any sorting requirements (ORDER BY clause).
             * Any LIMIT/OFFSET requirements (which MUST NOT be included in the query).
             3. Construct a valid SQL SELECT statement that fulfills all requirements.
-            4. If the user requests the **first, second, third, etc., table**, use the schema order to determine the table name.
+            4. If a requested column appears in multiple tables, construct a `UNION ALL` query with a `source_table` column..
             5. If the user asks for data from **both tables with a relationship**, construct an appropriate `JOIN` query.
             6. Output ONLY the SQL SELECT statement. If any rule is violated, output `"ERROR"`.
-
-            "The database table names :CVLAN_REPRT,LEAF_AND_SPINE_C93180YC_REPRT,CARD_SLOT_HIERARCHY_REPRT:"
+            
             {'/n'.join(schema_details)}
 
             Now, convert the following Natural Language Query: {user_query}"""
