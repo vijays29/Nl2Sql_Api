@@ -41,7 +41,6 @@ def Convert_Natural_Language_To_Sql(user_query:str,params = None) -> str | None:
             2. **Explicit Column Specification & Handling 'All Tables' Requests:**  
             * If the user specifies column names, include only those columns in the `SELECT` statement.  
             * If the user requests "all columns," "all data," or does not specify columns, use `SELECT *`. 
-            * if the user asks the data using table names 
             * If the user requests "all tables,return `"ERROR" 
             * If no tables exist, return `"ERROR"`.
 
@@ -59,7 +58,7 @@ def Convert_Natural_Language_To_Sql(user_query:str,params = None) -> str | None:
             * Ensure accurate handling of date ranges (using appropriate date/time functions if needed), numerical comparisons, and string matching (using LIKE or other relevant functions as needed).
 
             6. **Aggregation and Ordering Implementation:**
-            * Correctly implement any requested aggregation functions (SUM, COUNT, AVG, MIN, MAX, etc.).
+            * Correctly implement requested aggregation functions (COUNT) only.
             * Implement ORDER BY clauses exactly as requested, including the specified column(s) and sort order (ASC or DESC). Default to ASC if not specified.
 
             7. **Pagination is Strictly Prohibited (LIMIT, OFFSET, FETCH):**
@@ -120,3 +119,6 @@ def Convert_Natural_Language_To_Sql(user_query:str,params = None) -> str | None:
         except Exception as e:
             logger.exception(f"SQL generation failed for query: {user_query}")
             raise HTTPException(status_code=500, detail="SQL generation failed.")
+
+# s=Convert_Natural_Language_To_Sql(" i need no.of device ip, hostname and id")
+# print(s)
