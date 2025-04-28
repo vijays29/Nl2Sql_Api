@@ -7,19 +7,45 @@ from langchain_core.runnables import RunnablePassthrough, RunnableLambda
 from fastapi import HTTPException
 from src.schema_details import get_metadata
 from src.utils.logger import get_logger
+
+# Load environment variables from a .env file
 load_dotenv()
 
+# Initialize logger for NL2SQL processing
 logger = get_logger("Nl2Sql_Logger")
 
+# Retrieve API key for Google Generative AI
 API_KEY = os.getenv('API_KEY')
 
 if not API_KEY:
     logger.error("Missing API_KEY in environment variables.")
     raise HTTPException(status_code=500, detail="API_KEY is missing. Set it in the environment variables.")
 
+# Configure Google Generative AI client
 Aimodel.configure(api_key=API_KEY)
 
-def Convert_Natural_Language_To_Sql(user_query:str,params = None) -> str | None:   
+def Convert_Natural_Language_To_Sql(user_query:str,params = None) -> str | None:
+
+        """
+        Converts a natural language user query into a valid SQL SELECT statement
+        using Google's Gemini Generative AI Model.
+
+        Args:
+            user_query (str): 
+                The user's natural language request describing the desired data.
+            params (optional): 
+                Placeholder for additional future parameters (currently unused).
+
+        Returns:
+            str | None:
+                A valid SQL SELECT statement if successfully generated;
+                otherwise, None (in case of errors or invalid requests).
+        
+        Raises:
+            HTTPException:
+                - 500 Internal Server Error if environment setup fails or model invocation fails.
+        """
+            
         schema_details=get_metadata()
         if not schema_details:
             logger.error("Schema metadata retrieval failed.")
@@ -92,10 +118,14 @@ def Convert_Natural_Language_To_Sql(user_query:str,params = None) -> str | None:
             {'/n'.join(schema_details)}
 
             Now, convert the following Natural Language Query: {user_query}"""
-
+        
+        # Initialize the Language Model (LLM) with the Gemini model
         llm = ChatGoogleGenerativeAI(model="gemini-1.5-pro", api_key=API_KEY, temperature=0)
+
+        # Setup prompt for chain
         prompt = PromptTemplate(template=prompt_template,input_variables=["user_query"])
         try:
+              # Define the processing chain
               chain = (
                     {"user_query":RunnablePassthrough()}
                     |prompt
@@ -103,14 +133,17 @@ def Convert_Natural_Language_To_Sql(user_query:str,params = None) -> str | None:
                     |RunnableLambda(lambda x:x.content)
               )
 
+              # Invoke the chain with the user query
               sql_query = chain.invoke(user_query)
 
+              # Post-processing: Remove trailing semicolon if present
               if sql_query.endswith(';'):
                    sql_query = sql_query[:-1]
                    logger.info("Removed semicolon from generated SQL.")
               else:
                 logger.info("No semicolon found in generated SQL.")
-                
+
+              # Validation: Ensure output is a SELECT statement and does not contain "ERROR"
               if "ERROR" in sql_query or not sql_query.lower().startswith("select"):
                    logger.warning(f"Invalid SQL generated: {sql_query}")
                    return None
