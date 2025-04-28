@@ -1,70 +1,139 @@
-# Getting Started with Create React App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# NL2SQL UI Documentation
 
-## Available Scripts
+This documentation provides an overview of the front-end UI components and styles used in the NL2SQL app, explaining the key aspects of the implementation for a professional and clear understanding.
 
-In the project directory, you can run:
+## Overview
 
-### `npm start`
+The front-end UI for the NL2SQL application is built using React along with Material UI (MUI) components to ensure a modern, professional, and responsive design. The app's primary functionality revolves around converting natural language to SQL queries, displaying results in an interactive table, and allowing users to interact with various components such as the search bar and data tables.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Required Modules
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+1. **React**:
+   - Main library used for building the user interface.
+   - Version used: 17.x or later.
 
-### `npm test`
+2. **React Router DOM**:
+   - Used for handling routing in the application, allowing navigation between different views (Landing Page and Main Application).
+   - Version used: 6.x.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+3. **Material UI (MUI)**:
+   - Provides a comprehensive set of UI components like buttons, input fields, tables, etc., and implements the app's styling and layout.
+   - Version used: 5.x or later.
 
-### `npm run build`
+4. **Axios**:
+   - Axios is used for making HTTP requests to the FastAPI backend to fetch SQL query results and handle database connections.
+   - Version used: 0.21.x.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+5. **CSS**:
+   - Global styling is applied using custom CSS files to manage fonts, backgrounds, colors, and transitions.
+   - Custom styles are applied to achieve smooth transitions between light and dark modes.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## UI Components Overview
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### 1. LandingPage
+The LandingPage component serves as the introductory screen for the user. It contains a button to direct users to the main application (/main route). The page includes the NL2SQL app logo, a brief description, and a call to action (CTA) button labeled "Let's Get Started."
 
-### `npm run eject`
+### 2. MainApp
+The MainApp component represents the core functionality of the app. It contains the search bar for querying natural language input, a data table for displaying query results, and pagination controls for navigating through large datasets. It dynamically handles the connection to the backend and processes user queries.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+### 3. SearchBar
+The SearchBar allows users to enter natural language queries. It provides autocomplete suggestions for table and column names as the user types. Users can select multiple fields from the same table or multiple tables and enter custom SQL-like queries. Speech recognition is integrated to allow users to speak their queries instead of typing them. The component also displays toast messages when an invalid selection is made, ensuring better UX.
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### 4. DataTable
+The DataTable displays the results of SQL queries in a structured table format.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+Features include:
+- **Search**: A search bar for filtering through displayed data.
+- **Export**: Options to print or export the data as CSV.
+- **Advanced Filtering**: Each column has a dropdown filter for advanced filtering, including sorting (ascending and descending).
+- **Pagination**: Supports paginated data display with user-defined limits on rows per page.
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+### 5. PaginationBox
+The PaginationBox manages the display of paginated results in the DataTable. It includes page navigation controls (next, previous) and allows users to set a limit on how many rows to display per page.
 
-## Learn More
+## UI Styling
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+### Global Styling:
+- **Body**:
+  - Background color: Dark (#181818) for dark mode.
+  - Text color: White (#fff) for high contrast.
+  - Font family: Arial, sans-serif.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+```css
+body {
+  margin: 0;
+  padding: 0;
+  font-family: "Arial", sans-serif;
+  background-color: #181818;
+  color: #fff;
+}
+```
 
-### Code Splitting
+### Material UI Theme:
+- **Palette**: The app dynamically uses a light/dark mode palette.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+**Light mode**:
+- Background: #f5f5f5 (light gray).
+- Paper: #ffffff (white).
+- Text: #333333 (dark text) and #555555 (secondary text).
 
-### Analyzing the Bundle Size
+**Dark mode**:
+- Background: #181818 (dark gray).
+- Paper: #333333 (dark paper).
+- Text: #fff (white text) and #bbb (lighter secondary text).
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+### Typography:
+The primary font used is Arial, a simple sans-serif font to ensure readability.
 
-### Making a Progressive Web App
+```javascript
+const theme = createTheme({
+  palette: {
+    mode: "light",
+    background: {
+      default: "#f5f5f5",
+      paper: "#ffffff",
+    },
+    text: {
+      primary: "#333333",
+      secondary: "#555555",
+    },
+  },
+  typography: {
+    fontFamily: "Arial, sans-serif",
+  },
+});
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+### Smooth Transition for Theme Change:
+The transition between light and dark modes is made smooth using CSS transitions.
 
-### Advanced Configuration
+```css
+html, body {
+  transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+}
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+## Routing and Navigation
 
-### Deployment
+React Router is used to manage the routing between pages in the application:
+- LandingPage is the default route (/).
+- MainApp is accessible via /main.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+```javascript
+<Router>
+  <Routes>
+    <Route path="/" element={<LandingPage />} />
+    <Route path="/main" element={<MainApp />} />
+  </Routes>
+</Router>
+```
 
-### `npm run build` fails to minify
+## Error Handling
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+- **Toast Notifications**: The app utilizes toast notifications to inform users of issues like invalid query input or field selection errors.
+- **Error Logging**: Errors are logged in the console for debugging, ensuring quick identification of issues.
+
+## Conclusion
+
+The front-end of the NL2SQL application utilizes React for the structure, Material UI for components and design, and Axios for handling communication with the backend. The app's clean, responsive, and user-friendly interface ensures a seamless user experience, with smooth transitions between light and dark modes, intuitive search functionality, and interactive data display features.
