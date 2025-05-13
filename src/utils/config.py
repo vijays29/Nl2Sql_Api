@@ -2,11 +2,9 @@ from dotenv import load_dotenv
 from pydantic_settings import BaseSettings
 from src.utils.logger import get_logger
 
-# Initialize logger for settings initialization
-logger = get_logger(__name__)
+logger = get_logger("config")
 
-# Load environment variables from the .env file
-load_dotenv()
+load_dotenv(override=True)
 
 class Settings(BaseSettings):
     """
@@ -43,6 +41,12 @@ class Settings(BaseSettings):
     DB_CONNECTION_INCREMENT: int = 1
     """Number of connections to add to the pool when more are needed. Default is 1."""
 
+    PINECONE_API_KEY: str
+    """Pinecone API key for rag model"""
+
+    INDEX_NAME: str
+    """Index_name for the stored metadata in the Pinecone"""
+
     @classmethod
     def validate(cls):
         """
@@ -55,16 +59,12 @@ class Settings(BaseSettings):
         Raises:
             ValueError: If any required environment variables are missing.
         """
-        # Check for missing environment variables
-        missing_vars = [var for var in ['API_KEY', 'DB_USER', 'DB_PASS', 'DB_HOST', 'DB_SERVICE_NAME'] if not getattr(cls, var)]
+        missing_vars = [var for var in ['API_KEY', 'DB_USER', 'DB_PASS', 'DB_HOST', 'DB_SERVICE_NAME','PINECONE_API_KEY','INDEX_NAME'] if not getattr(cls, var)]
         
         if missing_vars:
-            # Log missing environment variables
             logger.error(f"Missing required environment variables: {', '.join(missing_vars)}")
-            # Raise an exception if required vars are missing
             raise ValueError(f"Missing required environment variables: {', '.join(missing_vars)}")
         else:
-            # Log success message if all required vars are present
             logger.info("All required environment variables are present.")
 
     class Config:
@@ -76,10 +76,7 @@ class Settings(BaseSettings):
         as class attributes to be ignored.
         """
         env_file = ".env"
-        extra = "allow"  # Allows undefined environment variables without causing an error
+        extra = "allow"
 
-# Initialize the settings object
 settings = Settings()
-
-# Log successful initialization of settings object
 logger.info("Settings object initialized successfully.")
