@@ -6,18 +6,23 @@ from fastapi import HTTPException
 from src.schema_details import get_metadata
 from src.utils.logger import get_logger
 from google.api_core.exceptions import ResourceExhausted
+import re
 
 from src.utils.config import settings
 logger = get_logger("Nl2Sql_Logger")
 
 API_KEY = settings.API_KEY
-print(API_KEY)
 
 if not API_KEY:
     logger.error("Missing API_KEY in environment variables.")
     raise HTTPException(status_code=500, detail="API_KEY is missing. Set it in the environment variables.")
 
 Aimodel.configure(api_key=API_KEY)
+
+def clean_sql_query(query: str) -> str:
+    query_cleaned = re.sub(r'`|sql', '', query, flags=re.IGNORECASE)
+    return query_cleaned.strip()
+    
 
 def Convert_Natural_Language_To_Sql(user_query:str,params = None) -> str | None:
             
@@ -94,7 +99,7 @@ def Convert_Natural_Language_To_Sql(user_query:str,params = None) -> str | None:
 
             Now, convert the following Natural Language Query: {user_query}"""
         
-        llm = ChatGoogleGenerativeAI(model="gemini-1.5-pro", api_key=API_KEY, temperature=0)
+        llm = ChatGoogleGenerativeAI(model="gemini-2.0-flash", api_key=API_KEY, temperature=0)
 
         prompt = PromptTemplate(template=prompt_template,input_variables=["user_query"])
         try:
@@ -106,6 +111,7 @@ def Convert_Natural_Language_To_Sql(user_query:str,params = None) -> str | None:
               )
 
               sql_query = chain.invoke(user_query)
+              sql_query=clean_sql_query(sql_query)
 
               if sql_query.endswith(';'):
                 sql_query = sql_query[:-1]
@@ -126,5 +132,5 @@ def Convert_Natural_Language_To_Sql(user_query:str,params = None) -> str | None:
             logger.exception(f"SQL generation failed for query: {user_query}")
             raise HTTPException(status_code=500, detail="SQL generation failed.")
 
-s=Convert_Natural_Language_To_Sql(" i need no.of device ip, hostname and id")
+s=Convert_Natural_Language_To_Sql(" i need number of dom available")
 print(s)
