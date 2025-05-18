@@ -1,0 +1,19 @@
+Table 1: LEAF_AND_SPINE_C93180YC_REPRT
+Description: Stores information about device ports and their utilization for 100G, 10G, and 1G connections.
+
+Columns:
+- ID (VARCHAR, PRIMARY KEY): Unique identifier for each device.
+- HOST_NAME (VARCHAR): Hostname of the device.
+- DVCIP (VARCHAR): Device IP address.
+- LOC_CODE (VARCHAR): Location code where the device is deployed.
+- RTR_MODEL (VARCHAR): Router model information.
+- DVC_TYPE (VARCHAR): Type of the device.
+- TOTA_L100G_PRTS (VARCHAR): Total number of 100G ports.
+- USE_D100G_PRTS (VARCHAR): Number of 100G ports currently in use.
+- FRE_E100G_PRTS (VARCHAR): Number of free 100G ports available.
+- TOTA_L10G_PRTS (VARCHAR): Total number of 10G ports.
+- USE_D10G_PRTS (VARCHAR): Number of 10G ports currently in use.
+- FRE_E10G_PRTS (VARCHAR): Number of free 10G ports available.
+- TOTA_L1G_PRTS (VARCHAR): Total number of 1G ports.
+- USE_D1G_PRTS (VARCHAR): Number of 1G ports currently in use.
+- FRE_E1G_PRTS (VARCHAR): Number of free 1G ports available.

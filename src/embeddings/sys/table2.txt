@@ -1,0 +1,22 @@
+Table 2: CARD_SLOT_HIERARCHY_REPRT
+Description: Captures detailed information about card and slot hierarchies within devices, including hardware and firmware details.
+
+Columns:
+- ID (VARCHAR, PRIMARY KEY): Unique identifier for each card slot entry.
+- MODEL (VARCHAR2): Device model.
+- SERIAL_NUM (VARCHAR): Serial number of the device or card.
+- FIRMWARE_REV (VARCHAR): Firmware revision version.
+- MANUFACTURER (VARCHAR): Manufacturer of the device or card.
+- DESC (VARCHAR): Description of the hardware.
+- CITY (VARCHAR): City where the device is located.
+- STATE (VARCHAR): State where the device is located.
+- SW_REV (VARCHAR): Software revision version.
+- HARDWARE_REV (VARCHAR): Hardware revision version.
+- REGION (VARCHAR): Geographical region of the device.
+- HOST_NAME (VARCHAR): Hostname associated with the device.
+- DVC_ROLE (VARCHAR): Role of the device (e.g., Leaf, Spine).
+- SLOT_HIERARCHY_DETS (VARCHAR): Details about the slot hierarchy.
+- ISSFP (VARCHAR): Indicator if the slot is SFP.
+- DOM (VARCHAR): Digital Optical Monitoring information.
+- MODEL_NAME (VARCHAR): Full model name.
+- DVCID (VARCHAR): Device ID.
