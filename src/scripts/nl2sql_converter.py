@@ -132,5 +132,5 @@ def Convert_Natural_Language_To_Sql(user_query:str,params = None) -> str | None:
             logger.exception(f"SQL generation failed for query: {user_query}")
             raise HTTPException(status_code=500, detail="SQL generation failed.")
 
-s=Convert_Natural_Language_To_Sql(" i need number of dom available")
-print(s)
+# s=Convert_Natural_Language_To_Sql(" i need number of dom available")
+# print(s)
